@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import './App.css';
 
@@ -45,11 +45,11 @@ class App extends React.Component {
     return (
       <div>
         <Header currentUser={this.state.currentUser} />
-        <Switch>
+        <BrowserRouter>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
           <Route path="/signin" component={SignInAndSignUpPage} />
-        </Switch>
+        </BrowserRouter>
       </div>
     );
   }
