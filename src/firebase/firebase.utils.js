@@ -10,7 +10,7 @@ const config = {
   storageBucket: 'test-ocr-259809.appspot.com',
   messagingSenderId: '276072172556',
   appId: '1:276072172556:web:1fe08277fc7a2891c57229',
-  measurementId: 'G-KJP10X8HLD'
+  measurementId: 'G-KJP10X8HLD',
 };
 
 firebase.initializeApp(config);
@@ -25,16 +25,15 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!snapShot.exists) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
-
     try {
       await userRef.set({
         displayName,
         email,
         createdAt,
-        ...additionalData
+        ...additionalData,
       });
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log('error creating user', error.message);
     }
   }
 
