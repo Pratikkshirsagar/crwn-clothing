@@ -3,14 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 const config = {
-  apiKey: 'AIzaSyA_JzCR2dBv8khOchHd_Mg99OJ93WBILY4',
-  authDomain: 'test-ocr-259809.firebaseapp.com',
-  databaseURL: 'https://test-ocr-259809.firebaseio.com',
-  projectId: 'test-ocr-259809',
-  storageBucket: 'test-ocr-259809.appspot.com',
-  messagingSenderId: '276072172556',
-  appId: '1:276072172556:web:1fe08277fc7a2891c57229',
-  measurementId: 'G-KJP10X8HLD',
+  // firebase config
 };
 
 firebase.initializeApp(config);
@@ -38,6 +31,36 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   }
 
   return userRef;
+};
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey);
+
+  const batch = firestore.batch();
+  objectsToAdd.forEach((obj) => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj);
+  });
+
+  return await batch.commit();
+};
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {});
 };
 
 export const auth = firebase.auth();
